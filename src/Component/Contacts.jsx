@@ -1,23 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import inputs from "../Constans/inputs";
 import ContactList from "./ContactList";
 import { v4 } from "uuid";
 import styles from "./Contacts.module.css";
+import { loadContacts, saveContacts } from "../utils/contactsStorage";
+const emptyContact = {
+  id: "",
+  name: "",
+  lastName: "",
+  email: "",
+  phone: "",
+};
 function Contacts() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => loadContacts());
   const [alert, setAlert] = useState("");
-  const [contact, setContact] = useState({
-    id: "",
-    name: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+  const [contact, setContact] = useState(emptyContact);
 
   const deletHandeler = (id) => {
-    const newContacts = contacts.filter((contact) => contact.id !== id);
-    setContacts(newContacts);
+    setContacts((currentContacts) =>
+      currentContacts.filter((contact) => contact.id !== id)
+    );
   };
+
+  useEffect(() => {
+    saveContacts(contacts);
+  }, [contacts]);
 
   const changeHandeler = (event) => {
     setContact((contact) => ({
@@ -33,18 +40,15 @@ function Contacts() {
       !contact.lastName ||
       !contact.phone
     ) {
-      setAlert("Pleas enter valid data !!");
+      setAlert("Please enter valid data");
       return;
     }
+
+    setAlert("");
+
     const newContact = { ...contact, id: v4() };
     setContacts((contacts) => [...contacts, newContact]);
-    setContact({
-      name: "",
-      lastName: "",
-      email: "",
-      phone: "",
-    });
-    console.log(contacts);
+    setContact(emptyContact);
   };
   return (
     <div className={styles.container}>

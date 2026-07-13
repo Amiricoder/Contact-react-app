@@ -3,6 +3,12 @@
 Contact App is a simple React project for managing a list of contacts.  
 Users can add new contacts, see them in a list, delete them, and keep the data after a page refresh.
 
+## Live Demo
+
+You can view the live version of the project here:
+
+[Contact App Live Demo](https://contacta-app-prj.netlify.app/)
+
 ## Features
 
 - Add a contact with name, last name, email, and phone number
